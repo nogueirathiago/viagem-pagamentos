@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Admin - Painel de Pagamentos</title>
+    <meta name="robots" content="noindex">
+    <link rel="stylesheet" href="./styles.css">
+  </head>
+  <body>
+    <main class="page-shell admin-shell">
+      <section class="hero" aria-labelledby="admin-title">
+        <div>
+          <p class="eyebrow">Area de atualizacao</p>
+          <h1 id="admin-title">Admin do painel</h1>
+        </div>
+      </section>
+
+      <section class="panel">
+        <div class="panel-heading">
+          <h2>Como editar com seguranca</h2>
+          <p>GitHub Pages nao tem servidor para proteger senha. A edicao segura fica na sua conta Google ou GitHub.</p>
+        </div>
+
+        <div class="admin-actions">
+          <a class="action-button" href="./" aria-label="Voltar para o painel publico">Ver painel publico</a>
+          <a class="action-button primary" data-admin-link href="https://github.com/nogueirathiago/viagem-pagamentos/edit/main/data.json">Editar dados</a>
+        </div>
+
+        <div class="admin-note">
+          <h2>Fluxo recomendado</h2>
+          <p>Use uma planilha Google publicada como CSV e deixe apenas sua conta com permissao de edicao. O grupo ve o board, mas nao consegue alterar os pagamentos.</p>
+          <p>Quando a planilha estiver pronta, cole o link de edicao em <strong>PAYMENT_ADMIN_URL</strong> no arquivo <strong>config.js</strong>.</p>
+        </div>
+      </section>
+    </main>
+
+    <script src="./config.js"></script>
+    <script>
+      const link = document.querySelector("[data-admin-link]");
+      if (window.PAYMENT_ADMIN_URL) {
+        link.href = window.PAYMENT_ADMIN_URL;
+      }
+    </script>
+  </body>
+</html>

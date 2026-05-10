@@ -16,6 +16,9 @@ Se quiser atualizar pelo celular, publique uma planilha Google como CSV e cole a
 
 ```js
 window.PAYMENT_DATA_SOURCE = "https://docs.google.com/spreadsheets/d/e/.../pub?output=csv";
+window.PAYMENT_ADMIN_URL = "https://docs.google.com/spreadsheets/d/.../edit";
 ```
 
 Se `PAYMENT_DATA_SOURCE` ficar vazio, o site usa `data.json`.
+
+Nao coloque senha no GitHub Pages: qualquer senha no HTML/JS fica publica. A pagina `admin.html` abre a fonte de edicao, mas quem protege a edicao e a permissao da sua conta Google ou GitHub.

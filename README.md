@@ -12,6 +12,7 @@ Gerador simples de painel para WhatsApp com:
 - `output/`: pasta criada automaticamente com os arquivos finais
 - `site/`: board web pronto para publicar em Vercel, Netlify ou GitHub Pages
 - `site/config.js`: opcional para conectar uma planilha Google publicada como CSV
+- `site/admin.html`: pagina de apoio para abrir a fonte de edicao permitida somente pela sua conta
 - `site/sheet-template.csv`: modelo de colunas para a planilha
 
 ## Como atualizar
@@ -35,9 +36,12 @@ O comando tambem sincroniza `site/data.json` e gera `site/preview.png`, usada co
 
 ```js
 window.PAYMENT_DATA_SOURCE = "https://docs.google.com/spreadsheets/d/e/.../pub?output=csv";
+window.PAYMENT_ADMIN_URL = "https://docs.google.com/spreadsheets/d/.../edit";
 ```
 
 Quando `PAYMENT_DATA_SOURCE` estiver vazio, o site usa `site/data.json`.
+
+Nao coloque senha no GitHub Pages: qualquer senha no HTML/JS fica publica. Para edicao privada, use permissao da sua conta Google ou GitHub.
 
 ## Como publicar gratis
 ### Recomendado: GitHub Pages
