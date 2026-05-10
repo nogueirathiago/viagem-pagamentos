@@ -127,9 +127,24 @@ async function githubRequest(url, token, options = {}) {
 
   const body = await response.json().catch(() => ({}));
   if (!response.ok) {
-    throw new Error(body.message || "Falha ao comunicar com o GitHub.");
+    const error = new Error(body.message || "Falha ao comunicar com o GitHub.");
+    error.status = response.status;
+    throw error;
   }
   return body;
+}
+
+function friendlyGithubError(error) {
+  if (error.status === 401) {
+    return "Token invalido ou expirado. Gere um novo token e cole novamente.";
+  }
+  if (error.status === 403) {
+    return "Token sem permissao de escrita. Confira se ele tem Contents: Read and write neste repositorio.";
+  }
+  if (error.status === 409 || error.message.includes("does not match")) {
+    return "O arquivo mudou no GitHub enquanto voce salvava. Atualize a pagina e tente de novo.";
+  }
+  return error.message;
 }
 
 async function saveToGithub(data) {
@@ -145,18 +160,31 @@ async function saveToGithub(data) {
   }
 
   const baseUrl = `https://api.github.com/repos/${githubTarget.owner}/${githubTarget.repo}/contents/${githubTarget.path}`;
-  const currentFile = await githubRequest(`${baseUrl}?ref=${githubTarget.branch}`, token);
+  const fileUrl = `${baseUrl}?ref=${githubTarget.branch}&t=${Date.now()}`;
   const content = `${JSON.stringify(data, null, 2)}\n`;
-
-  await githubRequest(baseUrl, token, {
-    method: "PUT",
-    body: JSON.stringify({
-      message: "Atualiza pagamentos pelo admin",
-      content: encodeBase64(content),
-      sha: currentFile.sha,
-      branch: githubTarget.branch,
-    }),
+  const payloadFor = (sha) => ({
+    message: "Atualiza pagamentos pelo admin",
+    content: encodeBase64(content),
+    sha,
+    branch: githubTarget.branch,
   });
+
+  for (let attempt = 0; attempt < 2; attempt += 1) {
+    const currentFile = await githubRequest(fileUrl, token, { cache: "no-store" });
+    try {
+      await githubRequest(baseUrl, token, {
+        method: "PUT",
+        body: JSON.stringify(payloadFor(currentFile.sha)),
+      });
+      paymentData = data;
+      return;
+    } catch (error) {
+      const canRetry = attempt === 0 && (error.status === 409 || error.message.includes("does not match"));
+      if (!canRetry) {
+        throw error;
+      }
+    }
+  }
 }
 
 async function copyJson(data) {
@@ -186,7 +214,7 @@ async function init() {
       await saveToGithub(buildUpdatedData());
       setStatus("Salvo. O painel publico atualiza automaticamente em alguns segundos.", "success");
     } catch (error) {
-      setStatus(error.message, "error");
+      setStatus(friendlyGithubError(error), "error");
     } finally {
       saveButton.disabled = false;
     }
