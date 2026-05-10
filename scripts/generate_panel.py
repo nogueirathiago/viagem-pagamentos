@@ -10,9 +10,9 @@ from typing import Iterable
 from PIL import Image, ImageDraw, ImageFont
 
 
-ROOT = Path(__file__).resolve().parent
-DATA_PATH = ROOT / "data.json"
-OUTPUT_DIR = ROOT / "output"
+ROOT = Path(__file__).resolve().parents[1]
+DATA_PATH = ROOT / "data" / "payments.json"
+OUTPUT_DIR = ROOT / "artifacts" / "whatsapp"
 PNG_PATH = OUTPUT_DIR / "painel_pagamentos_whatsapp.png"
 TEXT_PATH = OUTPUT_DIR / "painel_pagamentos_whatsapp.txt"
 SITE_DIR = ROOT / "site"
@@ -389,7 +389,7 @@ def render_image(data: dict, couples: list[Couple], total_amount: Decimal) -> No
             draw.text((text_x, row_y + 3), status, font=small_font, fill=ACCENT)
             draw_progress_bar(draw, pair_x, row_y + 30, col_width, total_paid(member) / data["installments_total"])
 
-    draw.text((80, 1765), "Atualize os pagamentos em data.json e execute: python3 generate_panel.py", font=small_font, fill=TEXT_MUTED)
+    draw.text((80, 1765), "Atualize os pagamentos em data/payments.json e execute: python3 scripts/generate_panel.py", font=small_font, fill=TEXT_MUTED)
     image.save(PNG_PATH, quality=95)
 
 

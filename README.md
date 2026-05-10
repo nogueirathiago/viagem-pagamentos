@@ -7,26 +7,37 @@ Gerador simples de painel para WhatsApp com:
 - site estatico em `site/` para publicar gratis e mandar o link no WhatsApp
 
 ## Arquivos
-- [`data.json`](/Users/thiagonogueira/Documents/Agentes/Agente%20controle%20de%20pagto%20viagem/data.json): dados da viagem e status de pagamentos
-- [`generate_panel.py`](/Users/thiagonogueira/Documents/Agentes/Agente%20controle%20de%20pagto%20viagem/generate_panel.py): script que valida os dados e gera as saídas
-- `output/`: pasta criada automaticamente com os arquivos finais
+- `data/payments.json`: dados fonte da viagem e status de pagamentos
+- `scripts/generate_panel.py`: script que valida os dados e gera as saídas
+- `artifacts/whatsapp/`: pasta com os arquivos finais para WhatsApp
 - `site/`: board web pronto para publicar em Vercel, Netlify ou GitHub Pages
 - `site/config.js`: opcional para conectar uma planilha Google publicada como CSV
-- `site/admin.html`: editor visual com checkboxes para gerar um `data.json` atualizado
+- `site/admin.html`: editor visual com checkboxes para salvar pagamentos no GitHub
 - `site/sheet-template.csv`: modelo de colunas para a planilha
 
+## Estrutura
+```text
+.
+├── data/                  # fonte local dos dados
+├── scripts/               # scripts de geracao e validacao
+├── artifacts/             # saidas geradas para compartilhar
+├── site/                  # site publico publicado no GitHub Pages
+├── .github/workflows/     # deploy automatico do Pages
+└── .claude/               # notas de continuidade do projeto
+```
+
 ## Como atualizar
-1. Edite `paid_installments` de cada pessoa em `data.json`.
+1. Edite `paid_installments` de cada pessoa em `data/payments.json`.
 2. Para uma parcela futura antecipada, adicione o mes em `prepaid_installments`, como `Novembro/2026`.
 3. Quando o casal pagar junto, aumente `paid_installments` dos dois integrantes.
 4. Quando so uma pessoa pagar, aumente apenas o `paid_installments` dela; o saldo do casal abate metade da parcela.
 5. Rode:
 
 ```bash
-python3 generate_panel.py
+python3 scripts/generate_panel.py
 ```
 
-O comando tambem sincroniza `site/data.json` e gera `site/preview.png`, usada como pre-visualizacao do link no WhatsApp.
+Ele sincroniza `site/data.json` e gera `site/preview.png`, usada como pre-visualizacao do link no WhatsApp.
 
 ## Como atualizar por Google Sheets
 1. Crie uma planilha com as colunas de `site/sheet-template.csv`.
@@ -44,8 +55,7 @@ Quando `PAYMENT_DATA_SOURCE` estiver vazio, o site usa `site/data.json`.
 Nao coloque senha no GitHub Pages: qualquer senha no HTML/JS fica publica. Para edicao privada, use permissao da sua conta Google ou GitHub.
 
 ## Editor visual
-Acesse `/admin.html`, marque os meses pagos e clique em `Salvar JSON`.
-O navegador baixa um arquivo `data.json` atualizado. Para refletir no site publicado, substitua `site/data.json` no GitHub por esse arquivo.
+Acesse `/admin.html`, marque os meses pagos e clique em `Salvar no GitHub`.
 
 Para salvar automaticamente pelo admin, crie um fine-grained token no GitHub com permissao `Contents: Read and write` apenas para este repositorio. Cole o token no campo do admin e clique em `Salvar no GitHub`.
 

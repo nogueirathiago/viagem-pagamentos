@@ -16,8 +16,8 @@
 - `site/admin.html`: checkbox-based payment editor.
 - `site/admin.js`: saves checked payments to GitHub using a user-provided fine-grained token.
 - `site/data.json`: data used by the published site.
-- `data.json`: local source used by the Python generator.
-- `generate_panel.py`: generates `output/painel_pagamentos_whatsapp.png`, text summary, `site/preview.png`, and syncs `site/data.json` from `data.json`.
+- `data/payments.json`: local source used by the Python generator.
+- `scripts/generate_panel.py`: generates `artifacts/whatsapp/painel_pagamentos_whatsapp.png`, text summary, `site/preview.png`, and syncs `site/data.json` from `data/payments.json`.
 
 ## Payment Rules
 - Total hospedagem: `R$ 6.938,68`.
@@ -38,8 +38,8 @@
 
 ## Validation Checklist
 - Run `node --check site/app.js && node --check site/admin.js`.
-- Run `python3 -m py_compile generate_panel.py`.
-- If preview changes, run `python3 generate_panel.py` and inspect `site/preview.png`.
+- Run `python3 -m py_compile scripts/generate_panel.py`.
+- If preview changes, run `python3 scripts/generate_panel.py` and inspect `site/preview.png`.
 - After pushing, watch latest deploy: `gh run list --repo nogueirathiago/viagem-pagamentos --limit 1`.
 - Confirm published metadata: `curl -L -s https://nogueirathiago.github.io/viagem-pagamentos/ | rg 'og:image|Viagem réveillon 2027'`.
 
