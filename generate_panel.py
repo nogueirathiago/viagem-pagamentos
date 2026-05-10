@@ -33,6 +33,10 @@ ACCENT = "#2F7D6B"
 ACCENT_SOFT = "#DCEFEA"
 WARN = "#A86D3A"
 DIVIDER = "#D9E1DD"
+PREVIEW_BLUE = "#2F71EF"
+PREVIEW_MINT = "#2FBF9F"
+PREVIEW_DARK = "#2C3950"
+PREVIEW_RED = "#D93A35"
 
 DATE_FMT = "%d/%m/%Y"
 
@@ -252,6 +256,50 @@ def draw_progress_bar(draw: ImageDraw.ImageDraw, x: int, y: int, width: int, pro
         rounded_box(draw, (x, y, x + fill_width, y + 18), ACCENT, radius=9)
 
 
+def progress_color(progress: float) -> str:
+    progress = max(0.0, min(1.0, progress))
+    hue = progress * 128
+    chroma = 0.72
+    light = 0.48
+    return hsl_to_hex(hue, chroma, light)
+
+
+def hsl_to_hex(hue: float, saturation: float, lightness: float) -> str:
+    chroma = (1 - abs(2 * lightness - 1)) * saturation
+    x = chroma * (1 - abs((hue / 60) % 2 - 1))
+    if 0 <= hue < 60:
+        red, green, blue = chroma, x, 0
+    elif 60 <= hue < 120:
+        red, green, blue = x, chroma, 0
+    else:
+        red, green, blue = 0, chroma, x
+    m = lightness - chroma / 2
+    rgb = tuple(round((channel + m) * 255) for channel in (red, green, blue))
+    return "#" + "".join(f"{channel:02X}" for channel in rgb)
+
+
+def mix_hex(color: str, white_ratio: float) -> str:
+    rgb = tuple(int(color[i:i + 2], 16) for i in (1, 3, 5))
+    mixed = tuple(round(channel + (255 - channel) * white_ratio) for channel in rgb)
+    return "#" + "".join(f"{channel:02X}" for channel in mixed)
+
+
+def draw_preview_card(
+    draw: ImageDraw.ImageDraw,
+    xy: tuple[int, int, int, int],
+    label: str,
+    value: str,
+    color: str,
+    label_font: ImageFont.FreeTypeFont,
+    value_font: ImageFont.FreeTypeFont,
+) -> None:
+    rounded_box(draw, xy, color, radius=18)
+    x1, y1, x2, _ = xy
+    draw.rounded_rectangle((x2 - 82, y1 - 36, x2 + 36, y1 + 84), radius=32, fill=mix_hex(color, 0.24))
+    draw.text((x1 + 22, y1 + 22), label, font=label_font, fill="#F4FAFF")
+    draw.text((x1 + 22, y1 + 58), value, font=value_font, fill="#FFFFFF")
+
+
 def render_image(data: dict, couples: list[Couple], total_amount: Decimal) -> None:
     OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
     image = create_gradient_background(CANVAS_WIDTH, CANVAS_HEIGHT)
@@ -347,42 +395,74 @@ def render_image(data: dict, couples: list[Couple], total_amount: Decimal) -> No
 
 def render_social_preview(data: dict, couples: list[Couple], total_amount: Decimal) -> None:
     SITE_DIR.mkdir(parents=True, exist_ok=True)
-    image = create_gradient_background(PREVIEW_WIDTH, PREVIEW_HEIGHT)
+    image = Image.new("RGB", (PREVIEW_WIDTH, PREVIEW_HEIGHT), "#F4F7FB")
     draw = ImageDraw.Draw(image)
 
-    title_font = load_font(58, bold=True)
-    section_font = load_font(30, bold=True)
-    body_font = load_font(26)
-    small_font = load_font(22)
-    amount_font = load_font(42, bold=True)
-
-    draw.ellipse((910, -115, 1270, 245), fill="#D7E8D8")
-    draw.ellipse((-140, 420, 165, 725), fill="#EAD7C8")
-
-    draw.text((70, 56), "Painel de Pagamentos", font=title_font, fill=TEXT_DARK)
-    draw.text((74, 124), data["group_name"], font=body_font, fill=TEXT_MUTED)
-
-    rounded_box(draw, (70, 190, 1130, 320), CARD_BG, radius=28, outline=DIVIDER)
-    draw.text((105, 223), "Hospedagem total", font=small_font, fill=TEXT_MUTED)
-    draw.text((105, 256), brl(total_amount), font=amount_font, fill=TEXT_DARK)
-    draw.text((630, 223), "Total por casal", font=small_font, fill=TEXT_MUTED)
-    draw.text((630, 256), brl(couple_total_amount(data["payment_rule"]["months"])), font=amount_font, fill=TEXT_DARK)
-
-    rounded_box(draw, (70, 355, 1130, 570), CARD_BG, radius=28, outline=DIVIDER)
-    draw.text((105, 388), "Saldo por casal", font=section_font, fill=TEXT_DARK)
     months = data["payment_rule"]["months"]
-    left_x = 105
-    right_x = 630
-    row_y = 445
+    group_paid = sum(couple_paid_amount(couple, months) for couple in couples)
+    group_balance = total_amount - group_paid
+    paid_installments = sum(total_paid(member) for couple in couples for member in couple.members)
+    total_installments = len(couples) * 2 * data["installments_total"]
+    overall_progress = paid_installments / total_installments
+    overall_color = progress_color(overall_progress)
+
+    title_font = load_font(54, bold=True)
+    subtitle_font = load_font(25)
+    section_font = load_font(28, bold=True)
+    body_font = load_font(23, bold=True)
+    small_font = load_font(19)
+    amount_font = load_font(34, bold=True)
+    percent_font = load_font(44, bold=True)
+
+    for x in range(0, PREVIEW_WIDTH, 42):
+        draw.line((x, 0, x, PREVIEW_HEIGHT), fill="#E7EDF6", width=1)
+    for y in range(0, PREVIEW_HEIGHT, 42):
+        draw.line((0, y, PREVIEW_WIDTH, y), fill="#E7EDF6", width=1)
+
+    draw.ellipse((-135, 95, 165, 395), fill="#F3D8D3")
+    draw.ellipse((930, -115, 1285, 240), fill="#D7F0DF")
+
+    rounded_box(draw, (48, 36, 96, 84), "#FFFFFF", radius=13)
+    draw.text((62, 51), "VP", font=small_font, fill=overall_color)
+    draw.text((112, 50), "Viagem Pay", font=body_font, fill=TEXT_DARK)
+
+    draw.text((48, 118), data["group_name"].upper(), font=small_font, fill=overall_color)
+    draw.text((48, 148), "Painel de Pagamentos", font=title_font, fill=TEXT_DARK)
+    draw.text((50, 212), "Hospedagem, parcelas e saldos em tempo real.", font=subtitle_font, fill=TEXT_MUTED)
+
+    rounded_box(draw, (835, 92, 1138, 252), "#FFFFFF", radius=18, outline="#E5ECF5")
+    draw.text((862, 123), "Progresso geral", font=small_font, fill=TEXT_MUTED)
+    draw.text((862, 154), f"{round(overall_progress * 100)}%", font=percent_font, fill=TEXT_DARK)
+    rounded_box(draw, (862, 217, 1110, 228), "#DCE7F8", radius=6)
+    rounded_box(draw, (862, 217, 862 + max(8, int(248 * overall_progress)), 228), overall_color, radius=6)
+
+    card_y = 282
+    draw_preview_card(draw, (48, card_y, 296, card_y + 112), "Total hospedagem", brl(total_amount), PREVIEW_BLUE, small_font, amount_font)
+    draw_preview_card(draw, (316, card_y, 564, card_y + 112), "Total por casal", brl(couple_total_amount(months)), PREVIEW_MINT, small_font, amount_font)
+    draw_preview_card(draw, (584, card_y, 832, card_y + 112), "Pago pelo grupo", brl(group_paid), overall_color, small_font, amount_font)
+    draw_preview_card(draw, (852, card_y, 1100, card_y + 112), "Falta no grupo", brl(group_balance), PREVIEW_DARK, small_font, amount_font)
+
+    rounded_box(draw, (48, 430, 1172, 594), "#FFFFFF", radius=18, outline="#E5ECF5")
+    draw.text((78, 460), "Saldo por casal", font=section_font, fill=TEXT_DARK)
+    draw.text((905, 464), "Status atualizado para WhatsApp", font=small_font, fill=TEXT_MUTED)
+
+    left_x = 78
+    right_x = 618
+    row_y = 512
     for index, couple in enumerate(couples):
         x = left_x if index % 2 == 0 else right_x
-        y = row_y + (index // 2) * 64
+        y = row_y + (index // 2) * 44
+        ratio = float(average_progress(couple) / Decimal(data["installments_total"]))
+        color = progress_color(ratio)
         progress = format_couple_progress(couple, data["installments_total"])
-        draw.text((x, y), couple.name, font=body_font, fill=TEXT_DARK)
-        draw.text((x + 125, y + 3), progress, font=small_font, fill=TEXT_MUTED)
-        draw.text((x, y + 30), f"Falta {brl(couple_balance(couple, months))}", font=small_font, fill=ACCENT)
+        draw.ellipse((x, y, x + 28, y + 28), fill=mix_hex(color, 0.78))
+        draw.pieslice((x, y, x + 28, y + 28), start=-90, end=-90 + int(360 * ratio), fill=color)
+        draw.ellipse((x + 7, y + 7, x + 21, y + 21), fill="#FFFFFF")
+        draw.text((x + 42, y - 2), couple.name, font=body_font, fill=TEXT_DARK)
+        draw.text((x + 145, y), progress, font=small_font, fill=TEXT_MUTED)
+        draw.text((x + 300, y), f"Falta {brl(couple_balance(couple, months))}", font=small_font, fill=color)
 
-    draw.text((72, 586), "Acesse o link para ver o board completo atualizado.", font=small_font, fill=TEXT_MUTED)
+    draw.text((48, 608), "Acesse o link para ver o board completo atualizado.", font=small_font, fill=TEXT_MUTED)
     image.save(SITE_PREVIEW_PATH, quality=95)
 
 
