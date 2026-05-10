@@ -4,12 +4,11 @@ Esta pasta contem o site estatico pronto para publicar gratis.
 
 ## Opcao recomendada: GitHub Pages
 
-1. Crie um repositorio no GitHub.
-2. Envie os arquivos desta pasta `site/` para o repositorio.
+1. Suba o repositorio para o GitHub.
+2. O workflow em `.github/workflows/pages.yml` publica esta pasta `site/`.
 3. No GitHub, va em `Settings > Pages`.
-4. Em `Build and deployment`, escolha `Deploy from a branch`.
-5. Escolha o branch principal e a pasta raiz do repositorio.
-6. O GitHub vai gerar um link publico para compartilhar no WhatsApp.
+4. Em `Build and deployment`, selecione `GitHub Actions` se ainda nao estiver selecionado.
+5. O GitHub vai gerar um link publico para compartilhar no WhatsApp.
 
 ## Atualizacao por planilha
 

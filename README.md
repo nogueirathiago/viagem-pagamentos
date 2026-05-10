@@ -41,12 +41,11 @@ Quando `PAYMENT_DATA_SOURCE` estiver vazio, o site usa `site/data.json`.
 
 ## Como publicar gratis
 ### Recomendado: GitHub Pages
-1. Crie um repositorio no GitHub.
-2. Envie os arquivos da pasta `site/` para esse repositorio.
+1. Suba o repositorio para o GitHub.
+2. O workflow em `.github/workflows/pages.yml` publica automaticamente a pasta `site/`.
 3. No GitHub, va em `Settings > Pages`.
-4. Escolha `Deploy from a branch`.
-5. Selecione o branch principal e a pasta raiz.
-6. Compartilhe o link final no WhatsApp.
+4. Em `Build and deployment`, selecione `GitHub Actions` se ainda nao estiver selecionado.
+5. Compartilhe o link final no WhatsApp.
 
 ### Alternativas tambem gratis
 - Vercel: boa se voce ja usa Vercel, mas tem mais recursos do que precisamos aqui.
