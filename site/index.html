@@ -17,44 +17,82 @@
   </head>
   <body>
     <main class="page-shell">
+      <nav class="topbar" aria-label="Navegacao principal">
+        <a class="brand" href="./" aria-label="Painel de Pagamentos">
+          <span class="brand-mark">VP</span>
+          <span>Viagem Pay</span>
+        </a>
+        <a class="admin-link" href="./admin.html">Atualizar pagamentos</a>
+      </nav>
+
       <section class="hero" aria-labelledby="page-title">
         <div>
           <p class="eyebrow">Grupo da Viagem</p>
           <h1 id="page-title">Painel de pagamentos</h1>
+          <p class="hero-copy">Acompanhamento visual das parcelas, saldos por casal e vencimentos da hospedagem.</p>
         </div>
-        <div class="hero-total" aria-label="Resumo financeiro">
-          <span>Total hospedagem</span>
-          <strong data-total-amount>R$ 0,00</strong>
+        <div class="hero-card" aria-label="Resumo geral">
+          <span>Progresso geral</span>
+          <strong data-overall-percent>0%</strong>
+          <div class="hero-meter"><span data-overall-meter></span></div>
         </div>
       </section>
 
       <section class="summary-grid" aria-label="Resumo da viagem">
-        <article>
+        <article class="metric-card metric-blue">
+          <span>Total hospedagem</span>
+          <strong data-total-amount>R$ 0,00</strong>
+        </article>
+        <article class="metric-card metric-mint">
           <span>Total por casal</span>
           <strong data-couple-total>R$ 0,00</strong>
         </article>
-        <article>
+        <article class="metric-card metric-coral">
           <span>Pago pelo grupo</span>
           <strong data-group-paid>R$ 0,00</strong>
         </article>
-        <article>
+        <article class="metric-card metric-violet">
           <span>Falta no grupo</span>
           <strong data-group-balance>R$ 0,00</strong>
         </article>
       </section>
 
-      <section class="panel" aria-labelledby="due-title">
-        <div class="panel-heading">
-          <h2 id="due-title">Vencimentos</h2>
-          <p>Dia 07 de cada mês, antecipando quando cair no fim de semana.</p>
-        </div>
-        <div class="due-grid" data-due-grid></div>
-      </section>
+      <div class="dashboard-grid">
+        <section class="panel spotlight-panel" aria-labelledby="progress-title">
+          <div class="panel-heading">
+            <h2 id="progress-title">Visão geral</h2>
+            <p>Pagamentos consolidados do grupo.</p>
+          </div>
+          <div class="progress-spotlight">
+            <div class="donut" data-donut style="--progress: 0">
+              <span data-donut-percent>0%</span>
+            </div>
+            <div class="spotlight-stats">
+              <div>
+                <span>Pago</span>
+                <strong data-group-paid-compact>R$ 0,00</strong>
+              </div>
+              <div>
+                <span>Pendente</span>
+                <strong data-group-balance-compact>R$ 0,00</strong>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section class="panel" aria-labelledby="due-title">
+          <div class="panel-heading">
+            <h2 id="due-title">Vencimentos</h2>
+            <p>Dia 07, antecipando fim de semana.</p>
+          </div>
+          <div class="due-grid" data-due-grid></div>
+        </section>
+      </div>
 
       <section class="panel" aria-labelledby="balance-title">
         <div class="panel-heading">
           <h2 id="balance-title">Saldo por casal</h2>
-          <p>Abate metade quando uma pessoa paga e abate cheio quando o casal paga junto.</p>
+          <p>Saldo, progresso e parcelas quitadas.</p>
         </div>
         <div class="couple-list" data-couple-list></div>
       </section>

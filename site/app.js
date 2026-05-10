@@ -73,6 +73,17 @@ function formatDate(value) {
   return dateFormatter.format(new Date(`${value}T00:00:00Z`));
 }
 
+function monthName(label) {
+  return label.split("/")[0];
+}
+
+function paidInstallmentCount(data) {
+  return data.couples.reduce(
+    (sum, couple) => sum + couple.members.reduce((memberSum, member) => memberSum + totalPaid(member), 0),
+    0
+  );
+}
+
 function parseCsvLine(line) {
   const cells = [];
   let cell = "";
@@ -147,10 +158,13 @@ async function loadData() {
 
 function renderDueDates(months) {
   const target = document.querySelector("[data-due-grid]");
-  target.innerHTML = months.map((month) => `
-    <article class="due-card">
-      <strong>${month.label}</strong>
-      <span>${formatDate(month.due_date)}</span>
+  target.innerHTML = months.map((month, index) => `
+    <article class="due-card" style="--delay: ${index * 55}ms">
+      <span class="due-index">${String(index + 1).padStart(2, "0")}</span>
+      <div>
+        <strong>${monthName(month.label)}</strong>
+        <span>${formatDate(month.due_date)}</span>
+      </div>
       <b class="pill">${brl(month.couple_amount)}</b>
     </article>
   `).join("");
@@ -163,13 +177,19 @@ function renderCouples(data) {
     const progress = coupleProgress(couple, data.installments_total);
     const ratio = Math.max(0, Math.min(1, averageProgress(couple, data.installments_total)));
     return `
-      <article class="couple-row">
-        <h3>${couple.name}</h3>
+      <article class="couple-row" style="--progress: ${ratio * 100}%">
+        <div class="couple-title">
+          <span>${Math.round(ratio * 100)}%</span>
+          <h3>${couple.name}</h3>
+        </div>
         <div class="couple-progress">
           <span class="couple-members">${couple.members.map((member) => member.name).join(" + ")} - ${progress}</span>
           <div class="bar" aria-label="${Math.round(ratio * 100)}% pago"><span style="width: ${ratio * 100}%"></span></div>
         </div>
-        <div class="balance">Falta ${brl(coupleBalance(couple, months))}</div>
+        <div class="balance">
+          <span>Falta</span>
+          <strong>${brl(coupleBalance(couple, months))}</strong>
+        </div>
       </article>
     `;
   }).join("");
@@ -181,7 +201,7 @@ function renderPeople(data) {
     const ratio = Math.max(0, Math.min(1, totalPaid(member) / data.installments_total));
     const status = memberProgress(member, data.installments_total);
     return `
-      <article class="person-card">
+      <article class="person-card" style="--progress: ${ratio * 100}%">
         <span>${couple.name}</span>
         <strong>${member.name}</strong>
         <div class="status">${status}</div>
@@ -194,10 +214,19 @@ function renderPeople(data) {
 function renderSummary(data) {
   const months = data.payment_rule.months;
   const totalPaidGroup = data.couples.reduce((sum, couple) => sum + couplePaid(couple, months), 0);
+  const paidCount = paidInstallmentCount(data);
+  const totalCount = data.couples.length * 2 * data.installments_total;
+  const progress = Math.max(0, Math.min(100, Math.round((paidCount / totalCount) * 100)));
   document.querySelector("[data-total-amount]").textContent = brl(data.total_amount);
   document.querySelector("[data-couple-total]").textContent = brl(coupleTotal(months));
   document.querySelector("[data-group-paid]").textContent = brl(totalPaidGroup);
   document.querySelector("[data-group-balance]").textContent = brl(data.total_amount - totalPaidGroup);
+  document.querySelector("[data-group-paid-compact]").textContent = brl(totalPaidGroup);
+  document.querySelector("[data-group-balance-compact]").textContent = brl(data.total_amount - totalPaidGroup);
+  document.querySelector("[data-overall-percent]").textContent = `${progress}%`;
+  document.querySelector("[data-donut-percent]").textContent = `${progress}%`;
+  document.querySelector("[data-overall-meter]").style.width = `${progress}%`;
+  document.querySelector("[data-donut]").style.setProperty("--progress", progress);
 }
 
 function validateData(data) {
