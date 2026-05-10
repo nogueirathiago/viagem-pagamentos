@@ -12,35 +12,32 @@
       <section class="hero" aria-labelledby="admin-title">
         <div>
           <p class="eyebrow">Area de atualizacao</p>
-          <h1 id="admin-title">Admin do painel</h1>
+          <h1 id="admin-title">Marcar pagamentos</h1>
         </div>
       </section>
 
       <section class="panel">
         <div class="panel-heading">
-          <h2>Como editar com seguranca</h2>
-          <p>GitHub Pages nao tem servidor para proteger senha. A edicao segura fica na sua conta Google ou GitHub.</p>
+          <h2>Parcelas pagas</h2>
+          <p>Marque os meses pagos por pessoa. O arquivo gerado ja separa parcelas normais e antecipadas.</p>
         </div>
 
         <div class="admin-actions">
-          <a class="action-button" href="./" aria-label="Voltar para o painel publico">Ver painel publico</a>
-          <a class="action-button primary" data-admin-link href="https://github.com/nogueirathiago/viagem-pagamentos/edit/main/data.json">Editar dados</a>
+          <a class="action-button" href="./">Ver painel publico</a>
+          <button class="action-button primary" type="button" data-save-json>Salvar JSON</button>
+          <button class="action-button" type="button" data-copy-json>Copiar JSON</button>
         </div>
 
+        <div class="payment-editor" data-payment-editor></div>
+
         <div class="admin-note">
-          <h2>Fluxo recomendado</h2>
-          <p>Use uma planilha Google publicada como CSV e deixe apenas sua conta com permissao de edicao. O grupo ve o board, mas nao consegue alterar os pagamentos.</p>
-          <p>Quando a planilha estiver pronta, cole o link de edicao em <strong>PAYMENT_ADMIN_URL</strong> no arquivo <strong>config.js</strong>.</p>
+          <h2>Depois de salvar</h2>
+          <p>O navegador baixa um novo <strong>data.json</strong>. Para atualizar o site publicado, envie esse arquivo para o GitHub substituindo <strong>site/data.json</strong>.</p>
+          <p>Como o GitHub Pages e estatico, ele nao consegue gravar no repositorio sozinho sem expor um token ou senha no codigo publico.</p>
         </div>
       </section>
     </main>
 
-    <script src="./config.js"></script>
-    <script>
-      const link = document.querySelector("[data-admin-link]");
-      if (window.PAYMENT_ADMIN_URL) {
-        link.href = window.PAYMENT_ADMIN_URL;
-      }
-    </script>
+    <script src="./admin.js" defer></script>
   </body>
 </html>

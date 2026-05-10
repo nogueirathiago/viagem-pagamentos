@@ -21,4 +21,8 @@ window.PAYMENT_ADMIN_URL = "https://docs.google.com/spreadsheets/d/.../edit";
 
 Se `PAYMENT_DATA_SOURCE` ficar vazio, o site usa `data.json`.
 
-Nao coloque senha no GitHub Pages: qualquer senha no HTML/JS fica publica. A pagina `admin.html` abre a fonte de edicao, mas quem protege a edicao e a permissao da sua conta Google ou GitHub.
+Nao coloque senha no GitHub Pages: qualquer senha no HTML/JS fica publica.
+
+## Editor visual
+Acesse `/admin.html`, marque os meses pagos e clique em `Salvar JSON`.
+O navegador baixa um arquivo `data.json` atualizado. Para refletir no site publicado, substitua `site/data.json` no GitHub por esse arquivo.

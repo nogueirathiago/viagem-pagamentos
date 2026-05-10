@@ -252,7 +252,7 @@ h2 {
 }
 
 .admin-shell {
-  max-width: 860px;
+  max-width: 1040px;
 }
 
 .admin-actions {
@@ -294,6 +294,63 @@ h2 {
   line-height: 1.55;
 }
 
+.payment-editor {
+  display: grid;
+  gap: 16px;
+}
+
+.editor-couple {
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  padding: 18px;
+}
+
+.editor-couple h2 {
+  font-size: 1.25rem;
+  margin-bottom: 14px;
+}
+
+.editor-person {
+  align-items: center;
+  border-top: 1px solid var(--line);
+  display: grid;
+  gap: 14px;
+  grid-template-columns: 130px 1fr;
+  padding: 14px 0 0;
+}
+
+.editor-person + .editor-person {
+  margin-top: 14px;
+}
+
+.month-checks {
+  display: grid;
+  gap: 8px;
+  grid-template-columns: repeat(auto-fit, minmax(128px, 1fr));
+}
+
+.month-checks label {
+  align-items: center;
+  background: #f7fbf8;
+  border: 1px solid #dbe9e4;
+  border-radius: 8px;
+  cursor: pointer;
+  display: flex;
+  gap: 8px;
+  justify-content: flex-start;
+  min-height: 44px;
+  padding: 8px;
+}
+
+.month-checks input {
+  accent-color: var(--accent);
+}
+
+.month-checks span {
+  font-size: 0.9rem;
+  font-weight: 750;
+}
+
 @media (max-width: 760px) {
   .page-shell {
     padding: 34px 14px 44px;
@@ -329,5 +386,13 @@ h2 {
 
   .balance {
     text-align: left;
+  }
+
+  .editor-person {
+    grid-template-columns: 1fr;
+  }
+
+  .month-checks {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 }
