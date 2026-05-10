@@ -77,6 +77,16 @@ function monthName(label) {
   return label.split("/")[0];
 }
 
+function progressColor(progress) {
+  const hue = Math.round(progress * 128);
+  return `hsl(${hue} 72% 48%)`;
+}
+
+function progressLightColor(progress) {
+  const hue = Math.round(progress * 128);
+  return `hsl(${hue} 78% 90%)`;
+}
+
 function paidInstallmentCount(data) {
   return data.couples.reduce(
     (sum, couple) => sum + couple.members.reduce((memberSum, member) => memberSum + totalPaid(member), 0),
@@ -176,8 +186,10 @@ function renderCouples(data) {
   target.innerHTML = data.couples.map((couple) => {
     const progress = coupleProgress(couple, data.installments_total);
     const ratio = Math.max(0, Math.min(1, averageProgress(couple, data.installments_total)));
+    const color = progressColor(ratio);
+    const lightColor = progressLightColor(ratio);
     return `
-      <article class="couple-row" style="--progress: ${ratio * 100}%">
+      <article class="couple-row" style="--progress: ${ratio * 100}%; --progress-color: ${color}; --progress-soft: ${lightColor}">
         <div class="couple-title">
           <span>${Math.round(ratio * 100)}%</span>
           <h3>${couple.name}</h3>
@@ -200,8 +212,9 @@ function renderPeople(data) {
   target.innerHTML = data.couples.flatMap((couple) => couple.members.map((member) => {
     const ratio = Math.max(0, Math.min(1, totalPaid(member) / data.installments_total));
     const status = memberProgress(member, data.installments_total);
+    const color = progressColor(ratio);
     return `
-      <article class="person-card" style="--progress: ${ratio * 100}%">
+      <article class="person-card" style="--progress: ${ratio * 100}%; --progress-color: ${color}">
         <span>${couple.name}</span>
         <strong>${member.name}</strong>
         <div class="status">${status}</div>
@@ -217,6 +230,9 @@ function renderSummary(data) {
   const paidCount = paidInstallmentCount(data);
   const totalCount = data.couples.length * 2 * data.installments_total;
   const progress = Math.max(0, Math.min(100, Math.round((paidCount / totalCount) * 100)));
+  const progressRatio = progress / 100;
+  const color = progressColor(progressRatio);
+  const lightColor = progressLightColor(progressRatio);
   document.querySelector("[data-total-amount]").textContent = brl(data.total_amount);
   document.querySelector("[data-couple-total]").textContent = brl(coupleTotal(months));
   document.querySelector("[data-group-paid]").textContent = brl(totalPaidGroup);
@@ -227,6 +243,8 @@ function renderSummary(data) {
   document.querySelector("[data-donut-percent]").textContent = `${progress}%`;
   document.querySelector("[data-overall-meter]").style.width = `${progress}%`;
   document.querySelector("[data-donut]").style.setProperty("--progress", progress);
+  document.documentElement.style.setProperty("--progress-color", color);
+  document.documentElement.style.setProperty("--progress-soft", lightColor);
 }
 
 function validateData(data) {

@@ -12,6 +12,8 @@
   --violet: #ab7bea;
   --cyan: #55c8d1;
   --danger: #d45146;
+  --progress-color: #d45146;
+  --progress-soft: #f9dedb;
   --shadow: 0 24px 70px rgb(39 76 128 / 16%);
   --soft-shadow: 0 14px 35px rgb(39 76 128 / 10%);
 }
@@ -21,7 +23,7 @@
 }
 
 html {
-  background: #2f7cf7;
+  background: #f1f5fb;
 }
 
 body {
@@ -30,15 +32,15 @@ body {
   margin: 0;
   min-height: 100vh;
   background:
-    radial-gradient(circle at 12% 16%, rgb(255 255 255 / 22%) 0 150px, transparent 151px),
-    radial-gradient(circle at 91% 10%, rgb(255 255 255 / 18%) 0 190px, transparent 191px),
-    linear-gradient(135deg, #2f80ff 0%, #3d72ef 48%, #42b8d9 100%);
+    radial-gradient(circle at 12% 16%, rgb(212 81 70 / 14%) 0 170px, transparent 171px),
+    radial-gradient(circle at 88% 10%, rgb(94 224 102 / 16%) 0 210px, transparent 211px),
+    linear-gradient(135deg, #f7f3f0 0%, #eef5fb 48%, #edf8f1 100%);
 }
 
 body::before {
   background:
-    linear-gradient(90deg, rgb(255 255 255 / 16%) 1px, transparent 1px),
-    linear-gradient(180deg, rgb(255 255 255 / 12%) 1px, transparent 1px);
+    linear-gradient(90deg, rgb(50 70 105 / 6%) 1px, transparent 1px),
+    linear-gradient(180deg, rgb(50 70 105 / 5%) 1px, transparent 1px);
   background-size: 42px 42px;
   content: "";
   inset: 0;
@@ -71,7 +73,7 @@ p {
 .brand,
 .admin-link {
   align-items: center;
-  color: #fff;
+  color: var(--ink);
   display: inline-flex;
   font-weight: 850;
   gap: 10px;
@@ -82,7 +84,7 @@ p {
   align-items: center;
   background: #fff;
   border-radius: 12px;
-  color: var(--blue);
+  color: var(--progress-color);
   display: inline-flex;
   height: 42px;
   justify-content: center;
@@ -90,8 +92,8 @@ p {
 }
 
 .admin-link {
-  background: rgb(255 255 255 / 20%);
-  border: 1px solid rgb(255 255 255 / 35%);
+  background: #fff;
+  border: 1px solid var(--line);
   border-radius: 999px;
   min-height: 42px;
   padding: 10px 16px;
@@ -99,7 +101,7 @@ p {
 
 .hero {
   align-items: end;
-  color: #fff;
+  color: var(--ink);
   display: grid;
   gap: 24px;
   grid-template-columns: 1fr minmax(250px, 340px);
@@ -107,7 +109,7 @@ p {
 }
 
 .eyebrow {
-  color: rgb(255 255 255 / 80%);
+  color: var(--progress-color);
   font-size: 0.9rem;
   font-weight: 850;
   letter-spacing: 0;
@@ -122,7 +124,7 @@ h1 {
 }
 
 .hero-copy {
-  color: rgb(255 255 255 / 82%);
+  color: var(--muted);
   font-size: 1.05rem;
   line-height: 1.55;
   margin-top: 18px;
@@ -130,8 +132,8 @@ h1 {
 }
 
 .hero-card {
-  background: rgb(255 255 255 / 96%);
-  border: 1px solid rgb(255 255 255 / 45%);
+  background: #fff;
+  border: 1px solid var(--line);
   border-radius: 8px;
   box-shadow: var(--shadow);
   color: var(--ink);
@@ -165,7 +167,7 @@ h1 {
 
 .hero-meter span,
 .bar span {
-  background: linear-gradient(90deg, var(--blue), var(--mint));
+  background: var(--progress-color);
   border-radius: inherit;
   display: block;
   height: 100%;
@@ -215,7 +217,7 @@ h1 {
 }
 
 .metric-blue {
-  background: linear-gradient(135deg, #457cf3, #265ed5);
+  background: linear-gradient(135deg, #2f71ef, #1f55c7);
 }
 
 .metric-mint {
@@ -223,11 +225,11 @@ h1 {
 }
 
 .metric-coral {
-  background: linear-gradient(135deg, #ffa557, #ff765f);
+  background: linear-gradient(135deg, var(--progress-color), color-mix(in srgb, var(--progress-color), #ffffff 20%));
 }
 
 .metric-violet {
-  background: linear-gradient(135deg, #b482ef, #8066df);
+  background: linear-gradient(135deg, #4f6179, #2c3950);
 }
 
 .dashboard-grid {
@@ -281,7 +283,7 @@ h2 {
   align-items: center;
   background:
     radial-gradient(circle, #fff 0 56%, transparent 57%),
-    conic-gradient(var(--green) calc(var(--progress) * 1%), #e7edf6 0);
+    conic-gradient(var(--progress-color) calc(var(--progress) * 1%), #e7edf6 0);
   border-radius: 50%;
   display: grid;
   height: 210px;
@@ -382,10 +384,11 @@ h2 {
 
 .couple-row {
   background:
-    linear-gradient(90deg, rgb(50 119 246 / 10), transparent 46%),
-    #f8fbff;
-  border: 1px solid #dfe8f6;
+    radial-gradient(circle at 92% -8%, rgb(255 255 255 / 20%) 0 70px, transparent 71px),
+    linear-gradient(135deg, var(--progress-color), color-mix(in srgb, var(--progress-color), #ffffff 20%));
+  border: 0;
   border-radius: 8px;
+  color: #fff;
   display: grid;
   gap: 16px;
   grid-template-columns: 86px 1fr;
@@ -397,9 +400,9 @@ h2 {
   align-items: center;
   background:
     radial-gradient(circle, #fff 0 55%, transparent 56%),
-    conic-gradient(var(--blue) var(--progress), #dde7f6 0);
+    conic-gradient(#fff var(--progress), rgb(255 255 255 / 28%) 0);
   border-radius: 50%;
-  color: var(--blue-dark);
+  color: var(--progress-color);
   display: grid;
   font-size: 0.95rem;
   font-weight: 900;
@@ -418,18 +421,30 @@ h2 {
 }
 
 .couple-members {
-  color: var(--muted);
+  color: rgb(255 255 255 / 84%);
   display: block;
   font-size: 0.98rem;
   margin-bottom: 12px;
+}
+
+.couple-row .bar {
+  background: rgb(255 255 255 / 26%);
+}
+
+.couple-row .bar span {
+  background: #fff;
 }
 
 .balance {
   grid-column: 2;
 }
 
+.couple-row .balance span {
+  color: rgb(255 255 255 / 78%);
+}
+
 .balance strong {
-  color: var(--blue-dark);
+  color: #fff;
   display: block;
   font-size: 1.35rem;
   margin-top: 4px;
@@ -450,7 +465,7 @@ h2 {
 }
 
 .person-card::before {
-  background: linear-gradient(180deg, var(--blue), var(--mint));
+  background: var(--progress-color);
   border-radius: 8px 0 0 8px;
   content: "";
   inset: 0 auto 0 0;
@@ -469,7 +484,7 @@ h2 {
 }
 
 .person-card .status {
-  color: var(--blue-dark);
+  color: var(--progress-color);
   font-weight: 900;
   margin-bottom: 10px;
 }
