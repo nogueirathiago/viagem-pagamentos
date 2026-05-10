@@ -132,7 +132,7 @@ function applySheetRows(data, rows) {
 }
 
 async function loadData() {
-  const response = await fetch(dataUrl);
+  const response = await fetch(`${dataUrl}?v=${Date.now()}`, { cache: "no-store" });
   if (!response.ok) throw new Error("Nao foi possivel carregar data.json.");
   const data = await response.json();
 
