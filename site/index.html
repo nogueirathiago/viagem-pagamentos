@@ -1,0 +1,72 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Painel de Pagamentos da Viagem</title>
+    <meta name="description" content="Acompanhe parcelas pagas, vencimentos e saldo por casal da viagem.">
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="Painel de Pagamentos da Viagem">
+    <meta property="og:description" content="Status atualizado das parcelas e saldo por casal.">
+    <meta property="og:image" content="./preview.png">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta name="twitter:card" content="summary_large_image">
+    <link rel="stylesheet" href="./styles.css">
+  </head>
+  <body>
+    <main class="page-shell">
+      <section class="hero" aria-labelledby="page-title">
+        <div>
+          <p class="eyebrow">Grupo da Viagem</p>
+          <h1 id="page-title">Painel de pagamentos</h1>
+        </div>
+        <div class="hero-total" aria-label="Resumo financeiro">
+          <span>Total hospedagem</span>
+          <strong data-total-amount>R$ 0,00</strong>
+        </div>
+      </section>
+
+      <section class="summary-grid" aria-label="Resumo da viagem">
+        <article>
+          <span>Total por casal</span>
+          <strong data-couple-total>R$ 0,00</strong>
+        </article>
+        <article>
+          <span>Pago pelo grupo</span>
+          <strong data-group-paid>R$ 0,00</strong>
+        </article>
+        <article>
+          <span>Falta no grupo</span>
+          <strong data-group-balance>R$ 0,00</strong>
+        </article>
+      </section>
+
+      <section class="panel" aria-labelledby="due-title">
+        <div class="panel-heading">
+          <h2 id="due-title">Vencimentos</h2>
+          <p>Dia 07 de cada mês, antecipando quando cair no fim de semana.</p>
+        </div>
+        <div class="due-grid" data-due-grid></div>
+      </section>
+
+      <section class="panel" aria-labelledby="balance-title">
+        <div class="panel-heading">
+          <h2 id="balance-title">Saldo por casal</h2>
+          <p>Abate metade quando uma pessoa paga e abate cheio quando o casal paga junto.</p>
+        </div>
+        <div class="couple-list" data-couple-list></div>
+      </section>
+
+      <section class="panel" aria-labelledby="people-title">
+        <div class="panel-heading">
+          <h2 id="people-title">Resumo por pessoa</h2>
+        </div>
+        <div class="people-grid" data-people-grid></div>
+      </section>
+    </main>
+
+    <script src="./config.js"></script>
+    <script src="./app.js" defer></script>
+  </body>
+</html>

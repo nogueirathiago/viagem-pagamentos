@@ -1,0 +1,1 @@
+window.PAYMENT_DATA_SOURCE = "";

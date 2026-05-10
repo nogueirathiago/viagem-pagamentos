@@ -1,0 +1,28 @@
+Controle de Pagamentos - Viagem com Amigos
+Total da hospedagem: R$ 6.938,68
+Total por casal: R$ 1.734,67
+Parcela do casal: R$ 289,11 de junho a outubro e R$ 289,12 em novembro.
+
+Vencimentos:
+- Junho/2026: 05/06/2026 | R$ 289,11 por casal
+- Julho/2026: 07/07/2026 | R$ 289,11 por casal
+- Agosto/2026: 07/08/2026 | R$ 289,11 por casal
+- Setembro/2026: 07/09/2026 | R$ 289,11 por casal
+- Outubro/2026: 07/10/2026 | R$ 289,11 por casal
+- Novembro/2026: 06/11/2026 | R$ 289,12 por casal
+
+Resumo por casal:
+- Casal 1: 0/6 | falta R$ 1.734,67
+- Casal 2: 0/6 | falta R$ 1.734,67
+- Casal 3: 1/6 Nov OK | falta R$ 1.445,55
+- Casal 4: 0/6 | falta R$ 1.734,67
+
+Resumo por pessoa:
+- Patricia: 0/6
+- Thiago: 0/6
+- Vanessa: 0/6
+- Alex: 0/6
+- Juliana: 1/6 Nov OK
+- Brunnão: 1/6 Nov OK
+- Danielly: 0/6
+- Marcelo: 0/6

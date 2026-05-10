@@ -1,0 +1,68 @@
+# Painel de Pagamentos da Viagem
+
+Gerador simples de painel para WhatsApp com:
+
+- imagem `PNG` para postar no grupo
+- resumo `TXT` para colar rapidamente
+- site estatico em `site/` para publicar gratis e mandar o link no WhatsApp
+
+## Arquivos
+- [`data.json`](/Users/thiagonogueira/Documents/Agentes/Agente%20controle%20de%20pagto%20viagem/data.json): dados da viagem e status de pagamentos
+- [`generate_panel.py`](/Users/thiagonogueira/Documents/Agentes/Agente%20controle%20de%20pagto%20viagem/generate_panel.py): script que valida os dados e gera as saídas
+- `output/`: pasta criada automaticamente com os arquivos finais
+- `site/`: board web pronto para publicar em Vercel, Netlify ou GitHub Pages
+- `site/config.js`: opcional para conectar uma planilha Google publicada como CSV
+- `site/sheet-template.csv`: modelo de colunas para a planilha
+
+## Como atualizar
+1. Edite `paid_installments` de cada pessoa em `data.json`.
+2. Para uma parcela futura antecipada, adicione o mes em `prepaid_installments`, como `Novembro/2026`.
+3. Quando o casal pagar junto, aumente `paid_installments` dos dois integrantes.
+4. Quando so uma pessoa pagar, aumente apenas o `paid_installments` dela; o saldo do casal abate metade da parcela.
+5. Rode:
+
+```bash
+python3 generate_panel.py
+```
+
+O comando tambem sincroniza `site/data.json` e gera `site/preview.png`, usada como pre-visualizacao do link no WhatsApp.
+
+## Como atualizar por Google Sheets
+1. Crie uma planilha com as colunas de `site/sheet-template.csv`.
+2. Use `Arquivo > Compartilhar > Publicar na Web`.
+3. Publique a aba como `CSV`.
+4. Cole a URL publicada em `site/config.js`:
+
+```js
+window.PAYMENT_DATA_SOURCE = "https://docs.google.com/spreadsheets/d/e/.../pub?output=csv";
+```
+
+Quando `PAYMENT_DATA_SOURCE` estiver vazio, o site usa `site/data.json`.
+
+## Como publicar gratis
+### Recomendado: GitHub Pages
+1. Crie um repositorio no GitHub.
+2. Envie os arquivos da pasta `site/` para esse repositorio.
+3. No GitHub, va em `Settings > Pages`.
+4. Escolha `Deploy from a branch`.
+5. Selecione o branch principal e a pasta raiz.
+6. Compartilhe o link final no WhatsApp.
+
+### Alternativas tambem gratis
+- Vercel: boa se voce ja usa Vercel, mas tem mais recursos do que precisamos aqui.
+- Netlify: boa para deploy arrastando a pasta `site/`, mas eu manteria GitHub Pages pela simplicidade e previsibilidade.
+
+## Sobre a previa no WhatsApp
+- O WhatsApp usa `site/preview.png` como imagem de capa do link.
+- O board completo abre atualizado quando a pessoa toca no link.
+- O WhatsApp pode manter cache da miniatura; se a capa antiga persistir, publique uma nova versao e reenviar o link costuma resolver.
+
+## Regras atuais
+- Total da hospedagem: `R$ 6.938,68`
+- 4 casais
+- Vencimento no dia `07` de cada mês
+- Se o dia 7 cair em fim de semana, o vencimento é antecipado
+- Parcelas por casal:
+  - junho a outubro: `R$ 289,11`
+  - novembro: `R$ 289,12`
+- Total por casal: `R$ 1.734,67`

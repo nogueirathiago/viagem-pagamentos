@@ -1,0 +1,103 @@
+{
+  "trip_name": "Controle de Pagamentos - Viagem com Amigos",
+  "group_name": "Grupo da Viagem",
+  "currency": "BRL",
+  "total_amount": 6938.68,
+  "installments_total": 6,
+  "payment_rule": {
+    "type": "fixed_day_advance_weekend_only",
+    "day_of_month": 7,
+    "months": [
+      {
+        "label": "Junho/2026",
+        "due_date": "2026-06-05",
+        "couple_amount": 289.11
+      },
+      {
+        "label": "Julho/2026",
+        "due_date": "2026-07-07",
+        "couple_amount": 289.11
+      },
+      {
+        "label": "Agosto/2026",
+        "due_date": "2026-08-07",
+        "couple_amount": 289.11
+      },
+      {
+        "label": "Setembro/2026",
+        "due_date": "2026-09-07",
+        "couple_amount": 289.11
+      },
+      {
+        "label": "Outubro/2026",
+        "due_date": "2026-10-07",
+        "couple_amount": 289.11
+      },
+      {
+        "label": "Novembro/2026",
+        "due_date": "2026-11-06",
+        "couple_amount": 289.12
+      }
+    ]
+  },
+  "couples": [
+    {
+      "name": "Casal 1",
+      "members": [
+        {
+          "name": "Patricia",
+          "paid_installments": 0
+        },
+        {
+          "name": "Thiago",
+          "paid_installments": 0
+        }
+      ]
+    },
+    {
+      "name": "Casal 2",
+      "members": [
+        {
+          "name": "Vanessa",
+          "paid_installments": 0
+        },
+        {
+          "name": "Alex",
+          "paid_installments": 0
+        }
+      ]
+    },
+    {
+      "name": "Casal 3",
+      "members": [
+        {
+          "name": "Juliana",
+          "paid_installments": 0,
+          "prepaid_installments": [
+            "Novembro/2026"
+          ]
+        },
+        {
+          "name": "Brunnão",
+          "paid_installments": 0,
+          "prepaid_installments": [
+            "Novembro/2026"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Casal 4",
+      "members": [
+        {
+          "name": "Danielly",
+          "paid_installments": 0
+        },
+        {
+          "name": "Marcelo",
+          "paid_installments": 0
+        }
+      ]
+    }
+  ]
+}
