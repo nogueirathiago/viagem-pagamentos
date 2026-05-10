@@ -24,16 +24,27 @@
 
         <div class="admin-actions">
           <a class="action-button" href="./">Ver painel publico</a>
-          <button class="action-button primary" type="button" data-save-json>Salvar JSON</button>
+          <button class="action-button primary" type="button" data-save-json>Salvar no GitHub</button>
           <button class="action-button" type="button" data-copy-json>Copiar JSON</button>
+          <button class="action-button" type="button" data-download-json>Baixar JSON</button>
+        </div>
+
+        <div class="token-box">
+          <label for="github-token">Token do GitHub</label>
+          <input id="github-token" type="password" autocomplete="off" data-github-token placeholder="Cole aqui seu fine-grained token">
+          <label class="remember-token">
+            <input type="checkbox" data-remember-token>
+            <span>Lembrar neste navegador</span>
+          </label>
+          <p data-save-status>O token fica somente no seu navegador e e usado para atualizar o arquivo site/data.json.</p>
         </div>
 
         <div class="payment-editor" data-payment-editor></div>
 
         <div class="admin-note">
-          <h2>Depois de salvar</h2>
-          <p>O navegador baixa um novo <strong>data.json</strong>. Para atualizar o site publicado, envie esse arquivo para o GitHub substituindo <strong>site/data.json</strong>.</p>
-          <p>Como o GitHub Pages e estatico, ele nao consegue gravar no repositorio sozinho sem expor um token ou senha no codigo publico.</p>
+          <h2>Como funciona</h2>
+          <p>Ao salvar, esta tela atualiza <strong>site/data.json</strong> no GitHub. O GitHub Pages publica a mudanca automaticamente em alguns segundos.</p>
+          <p>Se preferir nao usar token, use <strong>Baixar JSON</strong> como plano B.</p>
         </div>
       </section>
     </main>

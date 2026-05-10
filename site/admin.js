@@ -1,7 +1,18 @@
 const editor = document.querySelector("[data-payment-editor]");
 const saveButton = document.querySelector("[data-save-json]");
 const copyButton = document.querySelector("[data-copy-json]");
+const downloadButton = document.querySelector("[data-download-json]");
+const tokenInput = document.querySelector("[data-github-token]");
+const rememberTokenInput = document.querySelector("[data-remember-token]");
+const saveStatus = document.querySelector("[data-save-status]");
 let paymentData;
+
+const githubTarget = {
+  owner: "nogueirathiago",
+  repo: "viagem-pagamentos",
+  branch: "main",
+  path: "site/data.json",
+};
 
 function paidLabels(member, months) {
   const normalPaid = months.slice(0, member.paid_installments || 0).map((month) => month.label);
@@ -89,6 +100,65 @@ function downloadJson(data) {
   URL.revokeObjectURL(url);
 }
 
+function setStatus(message, type = "info") {
+  saveStatus.textContent = message;
+  saveStatus.dataset.status = type;
+}
+
+function encodeBase64(value) {
+  const bytes = new TextEncoder().encode(value);
+  let binary = "";
+  bytes.forEach((byte) => {
+    binary += String.fromCharCode(byte);
+  });
+  return btoa(binary);
+}
+
+async function githubRequest(url, token, options = {}) {
+  const response = await fetch(url, {
+    ...options,
+    headers: {
+      Accept: "application/vnd.github+json",
+      Authorization: `Bearer ${token}`,
+      "X-GitHub-Api-Version": "2022-11-28",
+      ...(options.headers || {}),
+    },
+  });
+
+  const body = await response.json().catch(() => ({}));
+  if (!response.ok) {
+    throw new Error(body.message || "Falha ao comunicar com o GitHub.");
+  }
+  return body;
+}
+
+async function saveToGithub(data) {
+  const token = tokenInput.value.trim();
+  if (!token) {
+    throw new Error("Cole um token do GitHub antes de salvar automaticamente.");
+  }
+
+  if (rememberTokenInput.checked) {
+    localStorage.setItem("paymentBoardGitHubToken", token);
+  } else {
+    localStorage.removeItem("paymentBoardGitHubToken");
+  }
+
+  const baseUrl = `https://api.github.com/repos/${githubTarget.owner}/${githubTarget.repo}/contents/${githubTarget.path}`;
+  const currentFile = await githubRequest(`${baseUrl}?ref=${githubTarget.branch}`, token);
+  const content = `${JSON.stringify(data, null, 2)}\n`;
+
+  await githubRequest(baseUrl, token, {
+    method: "PUT",
+    body: JSON.stringify({
+      message: "Atualiza pagamentos pelo admin",
+      content: encodeBase64(content),
+      sha: currentFile.sha,
+      branch: githubTarget.branch,
+    }),
+  });
+}
+
 async function copyJson(data) {
   await navigator.clipboard.writeText(`${JSON.stringify(data, null, 2)}\n`);
   copyButton.textContent = "JSON copiado";
@@ -98,12 +168,31 @@ async function copyJson(data) {
 }
 
 async function init() {
+  const rememberedToken = localStorage.getItem("paymentBoardGitHubToken");
+  if (rememberedToken) {
+    tokenInput.value = rememberedToken;
+    rememberTokenInput.checked = true;
+  }
+
   const response = await fetch("./data.json");
   if (!response.ok) throw new Error("Nao foi possivel carregar data.json.");
   paymentData = await response.json();
   renderEditor(paymentData);
 
-  saveButton.addEventListener("click", () => downloadJson(buildUpdatedData()));
+  saveButton.addEventListener("click", async () => {
+    saveButton.disabled = true;
+    setStatus("Salvando no GitHub...", "info");
+    try {
+      await saveToGithub(buildUpdatedData());
+      setStatus("Salvo. O painel publico atualiza automaticamente em alguns segundos.", "success");
+    } catch (error) {
+      setStatus(error.message, "error");
+    } finally {
+      saveButton.disabled = false;
+    }
+  });
+
+  downloadButton.addEventListener("click", () => downloadJson(buildUpdatedData()));
   copyButton.addEventListener("click", () => copyJson(buildUpdatedData()));
 }
 

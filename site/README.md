@@ -24,5 +24,5 @@ Se `PAYMENT_DATA_SOURCE` ficar vazio, o site usa `data.json`.
 Nao coloque senha no GitHub Pages: qualquer senha no HTML/JS fica publica.
 
 ## Editor visual
-Acesse `/admin.html`, marque os meses pagos e clique em `Salvar JSON`.
-O navegador baixa um arquivo `data.json` atualizado. Para refletir no site publicado, substitua `site/data.json` no GitHub por esse arquivo.
+Acesse `/admin.html`, marque os meses pagos e clique em `Salvar no GitHub`.
+Para salvar automaticamente, crie um fine-grained token no GitHub com permissao `Contents: Read and write` apenas para este repositorio e cole no campo do admin.

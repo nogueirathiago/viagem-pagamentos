@@ -294,6 +294,53 @@ h2 {
   line-height: 1.55;
 }
 
+.token-box {
+  background: #f7fbf8;
+  border: 1px solid #dbe9e4;
+  border-radius: 8px;
+  display: grid;
+  gap: 10px;
+  margin-bottom: 20px;
+  padding: 16px;
+}
+
+.token-box label {
+  font-weight: 850;
+}
+
+.token-box input[type="password"] {
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  color: var(--ink);
+  font: inherit;
+  min-height: 46px;
+  padding: 10px 12px;
+  width: 100%;
+}
+
+.remember-token {
+  align-items: center;
+  color: var(--muted);
+  display: flex;
+  gap: 8px;
+  width: fit-content;
+}
+
+.token-box p {
+  color: var(--muted);
+  line-height: 1.45;
+}
+
+.token-box p[data-status="success"] {
+  color: var(--accent-dark);
+  font-weight: 800;
+}
+
+.token-box p[data-status="error"] {
+  color: #a33d2f;
+  font-weight: 800;
+}
+
 .payment-editor {
   display: grid;
   gap: 16px;
