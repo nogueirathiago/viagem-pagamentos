@@ -46,11 +46,11 @@
       "members": [
         {
           "name": "Patricia",
-          "paid_installments": 0
+          "paid_installments": 1
         },
         {
           "name": "Thiago",
-          "paid_installments": 0
+          "paid_installments": 1
         }
       ]
     },
@@ -59,11 +59,11 @@
       "members": [
         {
           "name": "Vanessa",
-          "paid_installments": 0
+          "paid_installments": 1
         },
         {
           "name": "Alex",
-          "paid_installments": 0
+          "paid_installments": 1
         }
       ]
     },
@@ -72,14 +72,14 @@
       "members": [
         {
           "name": "Juliana",
-          "paid_installments": 0,
+          "paid_installments": 1,
           "prepaid_installments": [
             "Novembro/2026"
           ]
         },
         {
           "name": "Brunnão",
-          "paid_installments": 0,
+          "paid_installments": 1,
           "prepaid_installments": [
             "Novembro/2026"
           ]
@@ -91,11 +91,11 @@
       "members": [
         {
           "name": "Danielly",
-          "paid_installments": 0
+          "paid_installments": 1
         },
         {
           "name": "Marcelo",
-          "paid_installments": 0
+          "paid_installments": 1
         }
       ]
     }
